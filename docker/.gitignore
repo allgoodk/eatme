@@ -1,0 +1,4 @@
+/php/logs/*
+/php/tmp/*
+/nginx/logs/*
+.vscode

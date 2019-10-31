@@ -1,0 +1,63 @@
+version: '3.1'
+
+volumes:
+    postgres_eatme_vol: ~
+
+services:
+    php:
+        build:
+            context: ./docker/php
+            args:
+                useruid: 1000
+                username: app
+            dockerfile: Dockerfile
+        depends_on:
+            - postgres
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10000k"
+        environment:
+            DEBUG: 1
+        working_dir: "/var/www/app/"
+        user: app
+        hostname: "tester"
+        volumes:
+            - "./:/var/www/app/"
+            - "./docker/php/php.ini:/usr/local/etc/php/php.ini:ro"
+            - "./docker/php/fpm_pool.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro"
+
+    postgres:
+        build:
+            context: ./docker/postgres
+        shm_size: '300m'
+        environment:
+            POSTGRES_PASSWORD: docker
+            POSTGRES_USER: docker
+            POSTGRES_DB: docker
+            PGDATA: "/dev/shm/data"
+        command: "postgres -c 'config_file=/etc/postgresql/postgresql.conf'"
+        volumes:
+            - "./docker/postgres/postgres.test.conf:/etc/postgresql/postgresql.conf"
+            - "postgres_eatme_vol:/var/lib/postgresql/data"
+            - "${HOME}/:/var/data"
+        ports:
+            - "5432:5432"
+
+
+    nginx:
+        build:
+            context: ./docker/nginx
+            dockerfile: Dockerfile
+            args:
+                username: app
+                useruid: 1000
+        ports:
+            - "80:80"
+            - "8082:8082"
+        volumes:
+            - "./:/var/www/app"
+            - "./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+        links:
+            - php
+
