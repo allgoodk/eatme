@@ -36,7 +36,7 @@ RUN apt-get install -y \
         libzip-dev
 
 ### extensions install 
-RUN docker-php-ext-install -j$(nproc) iconv curl json opcache readline intl bcmath zip xml mbstring soap \
+RUN docker-php-ext-install -j$(nproc) iconv curl json opcache readline intl bcmath zip xml mbstring \
     && docker-php-ext-install pdo_pgsql \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
