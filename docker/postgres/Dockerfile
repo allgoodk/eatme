@@ -1,1 +1,1 @@
-FROM postgres:9.6
+FROM kartoza/postgis:9.6-2.4

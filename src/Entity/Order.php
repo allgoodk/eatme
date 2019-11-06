@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,9 +24,17 @@ class Order
 
     /**
      * @var Catalog
+     *
      * @ORM\ManyToOne(targetEntity="Catalog", inversedBy="orders")
      */
     private $catalog;
+
+    /**
+     * @var Point
+     *
+     * @ORM\Column(type="geopoint", nullable=false, options={"srid"="4326"})
+     */
+    private $placement;
 
     /**
      * @return int
@@ -52,4 +61,24 @@ class Order
         $this->catalog = $catalog;
         return $this;
     }
+
+    /**
+     * @return Point
+     */
+    public function getPlacement(): Point
+    {
+        return $this->placement;
+    }
+
+    /**
+     * @param Point $placement
+     * @return Order
+     */
+    public function setPlacement(Point $placement): self
+    {
+        $this->placement = $placement;
+
+        return $this;
+    }
+
 }
