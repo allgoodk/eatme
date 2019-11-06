@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude([
+        'Migrations',
+        '_output',
+        '_data',
+        '_support/_generated'
+    ])
+    ->in([
+        __DIR__.'/src',
+        __DIR__.'/tests',
+    ]);
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony'               => true,
+        '@Symfony:risky'         => true,
+        '@PSR2'                  => true,
+        'strict_param'           => true,
+        'array_syntax'           => ['syntax' => 'short'],
+        'declare_strict_types'   => true,
+        'binary_operator_spaces' => ['default' => 'align_single_space_minimal'],
+        'fopen_flags' => ['b_mode' => true],
+         'no_superfluous_phpdoc_tags' => false,
+    ])
+    ->setRiskyAllowed(true)
+    ->setFinder($finder);
