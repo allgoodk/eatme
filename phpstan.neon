@@ -1,0 +1,9 @@
+includes:
+	- vendor/phpstan/phpstan-doctrine/extension.neon
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    tmpDir: var/cache/phpstan
+    excludes_analyse:
+        - %currentWorkingDirectory%/src/DependencyInjection/Configuration.php
+
